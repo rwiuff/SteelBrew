@@ -57,10 +57,10 @@ module alu2 #(
         always_ff @ (posedge clk, posedge rst) begin
                 if (rst) begin
                         out       <= '0;
-                        out_valid <= 1'b1;
+                        out_valid <= '0;
                 end else begin
                         out       <= result;
-                        out_valid <= 1'b1;
+                        out_valid <= in_valid_r;
                 end
         end
 

@@ -13,7 +13,8 @@ public class Driver {
         // runDUT();
         // peekPokeStep();
         // expect();
-        Assert();
+        // Assert();
+        concurrency();
     }
 
     public static void runDUT() {
@@ -75,6 +76,30 @@ public class Driver {
         Signal signal2 = new Signal("out_valid", 1);
         batch.Assert(signal, signal2, 3, Operator.neq, alu);
         alu.brew(batch);
+        Forge.simulate();
+    }
+
+    private static void concurrency() {
+        SteelBrew steelBrew = new SteelBrew();
+        steelBrew.clean();
+        Forge.enableWSL(true);
+        Brewer alu = new Brewer("alu");
+        Brewer alu2 = new Brewer("alu2");
+        Batch batch = new Batch("PeekPokeStep");
+        Signal signal = new Signal("in_valid", 1);
+        batch.addSignal(signal);
+        batch.peek(signal);
+        batch.poke(signal, BigInteger.ONE);
+        batch.step();
+        batch.peek(signal);
+        batch.step();
+        batch.poke(signal, BigInteger.ZERO);
+        batch.step();
+        batch.peek(signal);
+        batch.step();
+        batch.step();
+        alu.brew(batch);
+        alu2.brew(batch);
         Forge.simulate();
     }
 }
