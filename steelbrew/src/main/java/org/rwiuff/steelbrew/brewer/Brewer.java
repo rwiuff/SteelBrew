@@ -54,7 +54,7 @@ public class Brewer {
     }
 
     public void runDUT() {
-        Testbench run = new Testbench(dut, "run");
+        Testbench run = new Testbench(dut, "run", clocks);
         run.add("    while (sim_time < MAX_SIM_TIME) {\n");
         run.add("        dut->clk ^= 1;\n");
         run.add("        dut->eval();\n");
@@ -65,7 +65,6 @@ public class Brewer {
         run.add("        sim_time++;\n");
         run.add("    }\n");
         run.add("\n");
-        run.setClocks(clocks);
         testbenches.add(run);
     }
 
@@ -82,7 +81,7 @@ public class Brewer {
     }
 
     public void brew(Batch batch) {
-        Testbench testbench = new Testbench(dut, batch.getName());
+        Testbench testbench = new Testbench(dut, batch.getName(), clocks);
         if (batch.assertions()) {
             HashMap<String, ArrayList<String>> assertions = batch.getAssertions();
             Set<String> functions = assertions.keySet();

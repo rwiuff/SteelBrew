@@ -5,15 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
 import org.rwiuff.steelbrew.brewer.Brewer;
 import org.rwiuff.steelbrew.forge.Barista.Order;
 

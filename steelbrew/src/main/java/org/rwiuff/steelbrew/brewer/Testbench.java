@@ -21,6 +21,12 @@ public class Testbench {
         this.testName = dut+name;
     }
 
+    public Testbench(String dut, String name, int clocks){
+        this.dut = dut;
+        this.name = name;
+        this.testName = dut+name;
+    }
+
     public void populate() {
         preamble.add("#include <stdlib.h>\n");
         preamble.add("#include <iostream>\n");
