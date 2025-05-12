@@ -27,7 +27,7 @@ public class Testbench {
         this.testName = dut+name;
     }
 
-    public void populate() {
+    public void populate() { // Adds the necessary lines to make a testbench runnable
         preamble.add("#include <stdlib.h>\n");
         preamble.add("#include <iostream>\n");
         preamble.add("#include <verilated.h>\n");
@@ -54,7 +54,7 @@ public class Testbench {
         end.add("}\n");
     }
 
-    public ArrayList<String> getLines() {
+    public ArrayList<String> getLines() { // Returns lines the the brewer
         ArrayList<String> returnList = new ArrayList<>();
         returnList.addAll(preamble);
         returnList.addAll(test);

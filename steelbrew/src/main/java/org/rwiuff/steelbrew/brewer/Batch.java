@@ -25,34 +25,38 @@ public class Batch {
         return steps;
     }
 
-    public void step() {
+    public void step() { // Increments the clock by 1
         steps.add("dut->clk ^= 1;\n");
         steps.add("dut->eval();\n");
         steps.add("m_trace->dump(sim_time);\n");
         steps.add("sim_time++;\n");
     }
 
-    public void peek(Signal signal) {
+    public void peek(Signal signal) { // Outputs the signal at the given clock cycle
         steps.add("std::cout << \"\\n Peek on " + signal.getName() + ": \" << (int)(dut->" + signal.getName()
                 + ") << \" @ simtime: \" << sim_time << std::endl;\n");
     }
 
-    public void poke(Signal signal, BigInteger integer) {
+    public void poke(Signal signal, BigInteger integer) { // Overwrites signal value
         steps.add("dut->" + signal.getName() + " = " + integer.intValue() + ";\n");
     }
 
-    public void addSignal(Signal signal) {
+    public void addSignal(Signal signal) { // Inserts signal as variable
         signals.put(signal.getName(), signal);
         steps.add(signal.getDeclaration());
     }
 
-    public void expect(Signal signal, BigInteger integer) {
+    public void expect(Signal signal, BigInteger integer) { // Listens for expected value on signal
         steps.add("std::cout << \"\\n Exptected " + integer.intValue() + " on " + signal.getName()
                 + ". Recieved \"  << (int)(dut->"
                 + signal.getName() + ") << \" @ simtime: \" << sim_time << std::endl;\n");
     }
 
     public void Assert(Signal signal, Signal signal2, int cycle, Operator op, Brewer brewer) {
+        /*
+         * Assertion method
+         * Checks if two signals adhere to a logical relationship by comparing them
+         */
         ArrayList<String> assertion = new ArrayList<>();
         String methodName = "assert" + signal.getName() + signal2.getName();
         String in = signal.getName();

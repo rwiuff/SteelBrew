@@ -11,16 +11,16 @@ import org.rwiuff.steelbrew.brewer.Brewer;
 
 public class Makefile {
 
-    private HashMap<String, ArrayList<String>> menu = new HashMap<>();
+    private HashMap<String, ArrayList<String>> menu = new HashMap<>(); // Map of all the tests indexed by DUT
 
-    public Makefile(ArrayList<Brewer> brewers) {
+    public Makefile(ArrayList<Brewer> brewers) { // Method that populates the menu
         for (Brewer brewer : brewers) {
             ArrayList<String> tests = new ArrayList<>();
             brewer.getTestbenches().forEach(t -> tests.add(t.getName()));
             menu.put(brewer.getDUT(), tests);
         }
-        createFile();
-        write();
+        createFile(); // Create makefile
+        write(); // Write recipes for all the tests
     }
 
     private void write() {

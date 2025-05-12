@@ -16,9 +16,9 @@ import org.rwiuff.steelbrew.forge.Barista.Order;
 public class Forge {
 
     private static volatile Forge instance = null;
-    private static boolean wsl = false;
-    private static ArrayList<Brewer> brewers = new ArrayList<>();
-    private static ArrayList<ArrayList<String>> orders = new ArrayList<>();
+    private static boolean wsl = false; // Bool that enables wsl command call
+    private static ArrayList<Brewer> brewers = new ArrayList<>(); // All the brewers
+    private static ArrayList<ArrayList<String>> orders = new ArrayList<>(); // Map with all the commands to be executed during simulation
 
     private Forge() {
         System.out.println(
@@ -29,7 +29,7 @@ public class Forge {
                 "+---------------------------------------------------------------------------------------------------------------+");
     }
 
-    public static Forge getInstance() {
+    public static Forge getInstance() { // Instantiates Forge as a Singleton
         if (instance == null) {
             synchronized (Forge.class) {
                 if (instance == null) {
@@ -44,7 +44,7 @@ public class Forge {
         Forge.wsl = wsl;
     }
 
-    private static ArrayList<String> wsl() {
+    private static ArrayList<String> wsl() { // Adds wsl command calls
         ArrayList<String> list = new ArrayList<>();
         list.add("wsl");
         list.add("-d");
@@ -56,7 +56,7 @@ public class Forge {
         Forge.brewers.add(brewer);
     }
 
-    public static void simulate() {
+    public static void simulate() { // Finds all the test names and creates a list of commands to execute
         prelude();
         ArrayList<String> tests = new ArrayList<>();
         brewers.forEach(b -> b.getTestbenches().forEach(t -> tests.add(t.getName())));
@@ -75,12 +75,12 @@ public class Forge {
         return brewers;
     }
 
-    public static void prelude() {
+    public static void prelude() { // Calls for brewers to create testbench files
         brewers.forEach(b -> b.grind());
-        new Makefile(brewers);
+        new Makefile(brewers); // Creates makefile
     }
 
-    public static void returnResults(ArrayList<Order> results) {
+    public static void returnResults(ArrayList<Order> results) { // Prints output from simulations
         System.out.println("Tests are done! Showing results");
         for (Order result : results) {
             System.out.println("###############################");
@@ -117,7 +117,7 @@ class Barista {
     }
 
     public Barista(ArrayList<ArrayList<String>> orders) {
-        ExecutorService executor = Executors.newCachedThreadPool();
+        ExecutorService executor = Executors.newCachedThreadPool(); // Threadpool that reuses threads if needed
         ArrayList<Order> results = new ArrayList<>();
         List<Future<Order>> futures = orders.stream()
                 .map(commandArgs -> executor.submit(() -> runProcess(commandArgs, executor))).toList();

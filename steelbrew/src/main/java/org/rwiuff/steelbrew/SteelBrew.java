@@ -17,10 +17,10 @@ public class SteelBrew {
         System.out.println("|                                             Welcome To SteelBrew                                              |");
         System.out.println("|                                      Servering up your verification needs                                     |");
         System.out.println("+---------------------------------------------------------------------------------------------------------------+");
-        Forge.getInstance();
+        Forge.getInstance(); // Instantiate the Forge singleton
     }
 
-    public void clean() {
+    public void clean() { // Clean all objects created during simulations
         cleanObj();
         cleanAux();
     }
