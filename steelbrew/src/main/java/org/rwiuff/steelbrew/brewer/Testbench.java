@@ -42,6 +42,7 @@ public class Testbench {
         preamble.add("    m_trace->open(\"waveform" + testName + ".vcd\");\n");
         preamble.add("\n");
         end.add("    m_trace->close();\n");
+        end.add("    dut->final();\n");
         end.add("    delete dut;\n");
         end.add("    exit(EXIT_SUCCESS);\n");
         end.add("}\n");

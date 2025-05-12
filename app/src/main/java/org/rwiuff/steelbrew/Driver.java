@@ -28,6 +28,7 @@ public class Driver {
         batch.peek(signal);
         batch.step();
         batch.poke(signal, BigInteger.ZERO);
+        batch.expect(signal, BigInteger.ONE);
         batch.step();
         batch.peek(signal);
         batch.step();

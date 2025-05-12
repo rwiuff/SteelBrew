@@ -37,12 +37,18 @@ public class Batch {
     }
 
     public void poke(Signal signal, BigInteger one) {
-        steps.add("dut->"+ signal.getName() + " = " + one.intValue() + ";\n");
+        steps.add("dut->" + signal.getName() + " = " + one.intValue() + ";\n");
     }
 
     public void addSignal(Signal signal) {
         signals.put(signal.getName(), signal);
         steps.add(signal.getDeclaration());
+    }
+
+    public void expect(Signal signal, BigInteger one) {
+        steps.add("std::cout << \"\\n Exptected " + one.intValue() + " on " + signal.getName()
+                + ". Recieved \"  << (int)(dut->"
+                + signal.getName() + ") << \" @ simtime: \" << sim_time << std::endl;\n");
     }
 
 }

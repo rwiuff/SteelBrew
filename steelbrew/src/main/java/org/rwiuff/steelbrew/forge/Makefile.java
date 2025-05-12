@@ -45,7 +45,7 @@ public class Makefile {
                     writer.write("\n");
                     writer.write(".stamp." + test + ".verilate: " + dut + ".sv " + "tb_" + test + ".cpp\n");
                     writer.write("\t@echo \"### VERILATING ###\"\n");
-                    writer.write("\tverilator -Wall --trace -cc " + dut + ".sv --exe tb_" + test + ".cpp --prefix V"
+                    writer.write("\tverilator --assert --coverage --trace -cc " + dut + ".sv --exe tb_" + test + ".cpp --prefix V"
                             + test + "\n");
                     writer.write("\t@touch .stamp." + test + ".verilate\n");
                     writer.write("\n");
