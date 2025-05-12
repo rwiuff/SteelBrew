@@ -86,7 +86,7 @@ public class Brewer {
                                   // runs until max number of cycles
             HashMap<String, ArrayList<String>> assertions = batch.getAssertions();
             Set<String> functions = assertions.keySet();
-            functions.forEach(f -> assertions.get(f).forEach(s -> testbench.add(s)));
+            functions.forEach(f -> assertions.get(f).forEach(s -> testbench.addFunc(s)));
             testbench.add("    while (sim_time < MAX_SIM_TIME) {\n");
             testbench.add("        dut->clk ^= 1;\n");
             testbench.add("        dut->eval();\n");

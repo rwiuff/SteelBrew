@@ -10,9 +10,9 @@ import org.rwiuff.steelbrew.forge.Forge;
 
 public class Driver {
     public static void main(String[] args) {
-        runDUT();
-        peekPokeStep();
-        expect();
+        // runDUT();
+        // peekPokeStep();
+        // expect();
         Assert();
     }
 
@@ -32,8 +32,6 @@ public class Driver {
         Forge.enableWSL(true);
         Brewer alu = new Brewer("alu");
         Batch batch = new Batch("PeekPokeStep");
-        batch.step();
-        batch.step();
         Signal signal = new Signal("in_valid", 1);
         batch.addSignal(signal);
         batch.peek(signal);
@@ -42,6 +40,10 @@ public class Driver {
         batch.peek(signal);
         batch.step();
         batch.poke(signal, BigInteger.ZERO);
+        batch.step();
+        batch.peek(signal);
+        batch.step();
+        batch.step();
         alu.brew(batch);
         Forge.simulate();
     }
@@ -54,8 +56,8 @@ public class Driver {
         Batch batch = new Batch("Expect");
         Signal signal = new Signal("in_valid", 1);
         batch.addSignal(signal);
-        batch.expect(signal, BigInteger.ONE);
         batch.step();
+        batch.expect(signal, BigInteger.ONE);
         batch.peek(signal);
         batch.step();
         alu.brew(batch);
@@ -67,12 +69,11 @@ public class Driver {
         steelBrew.clean();
         Forge.enableWSL(true);
         Brewer alu = new Brewer("alu2");
+        alu.clocks(40);
         Batch batch = new Batch("assertion");
         Signal signal = new Signal("in_valid", 1);
         Signal signal2 = new Signal("out_valid", 1);
-        batch.addSignal(signal);
-        batch.addSignal(signal2);
-        batch.Assert(signal, signal2, 1, Operator.neq, alu);
+        batch.Assert(signal, signal2, 3, Operator.neq, alu);
         alu.brew(batch);
         Forge.simulate();
     }

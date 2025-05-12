@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class Testbench {
     private ArrayList<String> preamble = new ArrayList<>();
+    private ArrayList<String> func = new ArrayList<>();
+    private ArrayList<String> main = new ArrayList<>();
     private ArrayList<String> end = new ArrayList<>();
     private ArrayList<String> test = new ArrayList<>();
     private String dut;
@@ -18,13 +20,14 @@ public class Testbench {
     public Testbench(String dut, String name) {
         this.dut = dut;
         this.name = name;
-        this.testName = dut+name;
+        this.testName = dut + name;
     }
 
-    public Testbench(String dut, String name, int clocks){
+    public Testbench(String dut, String name, int clocks) {
         this.dut = dut;
         this.name = name;
-        this.testName = dut+name;
+        this.testName = dut + name;
+        this.clocks = clocks;
     }
 
     public void populate() { // Adds the necessary lines to make a testbench runnable
@@ -39,14 +42,14 @@ public class Testbench {
         preamble.add("vluint64_t sim_time = 0;\n");
         preamble.add("vluint64_t posedge_cnt = 0;\n");
         preamble.add("\n");
-        preamble.add("int main(int argc, char** argv, char** env) {\n");
-        preamble.add("    V" + testName + " *dut = new V" + testName + ";\n");
-        preamble.add("\n");
-        preamble.add("    Verilated::traceEverOn(true);\n");
-        preamble.add("    VerilatedVcdC *m_trace = new VerilatedVcdC;\n");
-        preamble.add("    dut->trace(m_trace, 5);\n");
-        preamble.add("    m_trace->open(\"waveform" + testName + ".vcd\");\n");
-        preamble.add("\n");
+        main.add("int main(int argc, char** argv, char** env) {\n");
+        main.add("    V" + testName + " *dut = new V" + testName + ";\n");
+        main.add("\n");
+        main.add("    Verilated::traceEverOn(true);\n");
+        main.add("    VerilatedVcdC *m_trace = new VerilatedVcdC;\n");
+        main.add("    dut->trace(m_trace, 5);\n");
+        main.add("    m_trace->open(\"waveform" + testName + ".vcd\");\n");
+        main.add("\n");
         end.add("    m_trace->close();\n");
         end.add("    dut->final();\n");
         end.add("    delete dut;\n");
@@ -57,6 +60,8 @@ public class Testbench {
     public ArrayList<String> getLines() { // Returns lines the the brewer
         ArrayList<String> returnList = new ArrayList<>();
         returnList.addAll(preamble);
+        returnList.addAll(func);
+        returnList.addAll(main);
         returnList.addAll(test);
         returnList.addAll(end);
         return returnList;
@@ -72,5 +77,9 @@ public class Testbench {
 
     public String getName() {
         return testName;
+    }
+
+    public void addFunc(String string) {
+        func.add(string);
     }
 }
