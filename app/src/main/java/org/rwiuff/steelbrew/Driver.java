@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 import org.rwiuff.steelbrew.brewer.Batch;
 import org.rwiuff.steelbrew.brewer.Brewer;
+import org.rwiuff.steelbrew.brewer.Operator;
 import org.rwiuff.steelbrew.brewer.Signal;
 import org.rwiuff.steelbrew.forge.Forge;
 
@@ -20,7 +21,8 @@ public class Driver {
         Batch batch = new Batch("PeekPokeStep");
         batch.step();
         batch.step();
-        Signal signal = new Signal("b_in");
+        Signal signal = new Signal("in_valid", 1);
+        Signal signal2 = new Signal("out_valid", 1);
         batch.addSignal(signal);
         batch.peek(signal);
         batch.poke(signal, BigInteger.ONE);
@@ -32,13 +34,13 @@ public class Driver {
         batch.step();
         batch.peek(signal);
         batch.step();
+        Batch batch2 = new Batch("assertion");
+        batch2.addSignal(signal);
+        batch2.addSignal(signal2);
+        batch2.Assert(signal, signal2, 1, Operator.neq, alu);
         alu2.brew(batch);
+        alu.brew(batch2);
         Forge.simulate();
-        // steelBrew.cleanObj();
-        // steelBrew.cleanAux();
-        // steelBrew.clean();
-        // steelBrew.cleanTestbench();
-        // steelBrew.cleanObj();
-        // steelBrew.cleanWaveform();
+        steelBrew.clean();
     }
 }

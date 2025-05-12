@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
 import org.rwiuff.steelbrew.forge.Forge;
 
 public class Brewer {
@@ -80,6 +83,22 @@ public class Brewer {
 
     public void brew(Batch batch) {
         Testbench testbench = new Testbench(dut, batch.getName());
+        if (batch.assertions()) {
+            HashMap<String, ArrayList<String>> assertions = batch.getAssertions();
+            Set<String> functions = assertions.keySet();
+            functions.forEach(f -> assertions.get(f).forEach(s -> testbench.add(s)));
+            testbench.add("    while (sim_time < MAX_SIM_TIME) {\n");
+            testbench.add("        dut->clk ^= 1;\n");
+            testbench.add("        dut->eval();\n");
+            testbench.add("        if(dut->clk == 1){\n");
+            testbench.add("            posedge_cnt++;\n");
+            testbench.add("        }\n");
+            functions.forEach(f -> testbench.add(f+"\n"));
+            testbench.add("        m_trace->dump(sim_time);\n");
+            testbench.add("        sim_time++;\n");
+            testbench.add("    }\n");
+            testbench.add("\n");
+        }
         ArrayList<String> steps = batch.getSteps();
         for (String step : steps) {
             testbench.add(step);
