@@ -4,6 +4,12 @@
 # Ignore Gradle build output directory
 build
 
+/obj_dir
+tb_*.cpp
+Makefile
+*.vcd
+.stamp.*
+
 # Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,gradle,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,gradle,java
 
