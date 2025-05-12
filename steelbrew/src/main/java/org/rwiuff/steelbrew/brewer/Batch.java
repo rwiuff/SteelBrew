@@ -17,19 +17,19 @@ public class Batch {
         step();
     }
 
-    public void step() {
-        steps.add("dut->clk ^= 1;\n");
-        steps.add("dut->eval();\n");
-        steps.add("m_trace->dump(sim_time);\n");
-        steps.add("sim_time++;\n");
-    }
-
     public String getName() {
         return name;
     }
 
     public ArrayList<String> getSteps() {
         return steps;
+    }
+
+    public void step() {
+        steps.add("dut->clk ^= 1;\n");
+        steps.add("dut->eval();\n");
+        steps.add("m_trace->dump(sim_time);\n");
+        steps.add("sim_time++;\n");
     }
 
     public void peek(Signal signal) {
