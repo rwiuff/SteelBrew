@@ -10,19 +10,31 @@ import org.rwiuff.steelbrew.forge.Forge;
 
 public class Driver {
     public static void main(String[] args) {
+        runDUT();
+        peekPokeStep();
+        expect();
+        Assert();
+    }
+
+    public static void runDUT() {
         SteelBrew steelBrew = new SteelBrew();
         steelBrew.clean();
         Forge.enableWSL(true);
         Brewer alu = new Brewer("alu");
         alu.clocks(40);
         alu.runDUT();
-        Brewer alu2 = new Brewer("alu2");
-        alu2.runDUT();
+        Forge.simulate();
+    }
+
+    public static void peekPokeStep() {
+        SteelBrew steelBrew = new SteelBrew();
+        steelBrew.clean();
+        Forge.enableWSL(true);
+        Brewer alu = new Brewer("alu");
         Batch batch = new Batch("PeekPokeStep");
         batch.step();
         batch.step();
         Signal signal = new Signal("in_valid", 1);
-        Signal signal2 = new Signal("out_valid", 1);
         batch.addSignal(signal);
         batch.peek(signal);
         batch.poke(signal, BigInteger.ONE);
@@ -30,17 +42,38 @@ public class Driver {
         batch.peek(signal);
         batch.step();
         batch.poke(signal, BigInteger.ZERO);
+        alu.brew(batch);
+        Forge.simulate();
+    }
+
+    private static void expect() {
+        SteelBrew steelBrew = new SteelBrew();
+        steelBrew.clean();
+        Forge.enableWSL(true);
+        Brewer alu = new Brewer("alu");
+        Batch batch = new Batch("Expect");
+        Signal signal = new Signal("in_valid", 1);
+        batch.addSignal(signal);
         batch.expect(signal, BigInteger.ONE);
         batch.step();
         batch.peek(signal);
         batch.step();
-        Batch batch2 = new Batch("assertion");
-        batch2.addSignal(signal);
-        batch2.addSignal(signal2);
-        batch2.Assert(signal, signal2, 1, Operator.neq, alu);
-        alu2.brew(batch);
-        alu.brew(batch2);
+        alu.brew(batch);
         Forge.simulate();
+    }
+
+    private static void Assert() {
+        SteelBrew steelBrew = new SteelBrew();
         steelBrew.clean();
+        Forge.enableWSL(true);
+        Brewer alu = new Brewer("alu2");
+        Batch batch = new Batch("assertion");
+        Signal signal = new Signal("in_valid", 1);
+        Signal signal2 = new Signal("out_valid", 1);
+        batch.addSignal(signal);
+        batch.addSignal(signal2);
+        batch.Assert(signal, signal2, 1, Operator.neq, alu);
+        alu.brew(batch);
+        Forge.simulate();
     }
 }
