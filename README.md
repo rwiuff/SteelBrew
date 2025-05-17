@@ -1,4 +1,4 @@
-![steelbrew](https://github.com/user-attachments/assets/75fb407e-e5b1-4552-b98c-42b69a9e799b)
+![steelbrew](https://github.com/rwiuff/02125Thesis/blob/main/graphics/steelbrew.png)
 # SteelBrew
 This reporsitory contains SteelBrew, the Bachelor's project by Rasmus Wiuff ([rwiuff@gmail.com](mailto:rwiuff@gmail.com)).
 
