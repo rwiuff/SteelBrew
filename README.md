@@ -95,3 +95,4 @@ From a declared SteelBrew object, there are commands to clean the working direct
 - [ ] Rewrite testbench heuristics to allow for time-independent tests.
 - [ ] Implement assertions
 - [ ] Enable Verilator multithreading
+- [ ] Refactor into deployable plugin
