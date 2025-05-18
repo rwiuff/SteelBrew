@@ -91,7 +91,7 @@ From a declared SteelBrew object, there are commands to clean the working direct
 - `.dleanObj()` for removing the `obj_dir`
 - `.clean()` for executing both of the above
 ## Todo list
-- [ ] Clean up the STDOUT for a nicer user experience.
+- [X] Clean up the STDOUT for a nicer user experience.
 - [ ] Rewrite testbench heuristics to allow for time-independent tests.
 - [ ] Implement assertions
 - [ ] Enable Verilator multithreading
