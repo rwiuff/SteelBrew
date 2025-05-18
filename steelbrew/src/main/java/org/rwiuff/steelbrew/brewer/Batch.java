@@ -39,6 +39,8 @@ public class Batch {
 
     public void poke(Signal signal, BigInteger integer) { // Overwrites signal value
         steps.add("dut->" + signal.getName() + " = " + integer.intValue() + ";\n");
+        steps.add("std::cout << \"\\n Poke on " + signal.getName() + ": " + integer.intValue()
+                + "\"<< \" @ simtime: \" << sim_time << std::endl;\n");
     }
 
     public void addSignal(Signal signal) { // Inserts signal as variable
@@ -47,7 +49,7 @@ public class Batch {
     }
 
     public void expect(Signal signal, BigInteger integer) { // Listens for expected value on signal
-        steps.add("std::cout << \"\\n Exptected " + integer.intValue() + " on " + signal.getName()
+        steps.add("std::cout << \"\\n Expected " + integer.intValue() + " on " + signal.getName()
                 + ". Recieved \"  << (int)(dut->"
                 + signal.getName() + ") << \" @ simtime: \" << sim_time << std::endl;\n");
     }

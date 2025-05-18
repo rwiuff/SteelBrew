@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
+
 import org.rwiuff.steelbrew.brewer.Brewer;
 import org.rwiuff.steelbrew.forge.Barista.Order;
 
@@ -18,7 +21,8 @@ public class Forge {
     private static volatile Forge instance = null;
     private static boolean wsl = false; // Bool that enables wsl command call
     private static ArrayList<Brewer> brewers = new ArrayList<>(); // All the brewers
-    private static ArrayList<ArrayList<String>> orders = new ArrayList<>(); // Map with all the commands to be executed during simulation
+    private static ArrayList<ArrayList<String>> orders = new ArrayList<>(); // Map with all the commands to be executed
+                                                                            // during simulation
 
     private Forge() {
         System.out.println(
@@ -81,17 +85,28 @@ public class Forge {
     }
 
     public static void returnResults(ArrayList<Order> results) { // Prints output from simulations
-        System.out.println("Tests are done! Showing results");
+        System.out.println("\nTests are done! Showing results\n");
         for (Order result : results) {
-            System.out.println("###############################");
+            System.out.println(
+                    "+---------------------------------------------------------------------------------------------------------------+");
             String[] command = result.command.split("\\s");
-            System.out.println("Test: " + command[command.length - 1]);
-            System.out.println("-------------------------------");
-            System.out.println(result.stdout);
-            System.out.println("-------------------------------");
-            System.out.println(result.stderr);
+            System.out.println(String.format("| Test: %s %s |", command[command.length - 1],
+                    " ".repeat(102 - command[command.length - 1].length())));
+            System.out.println(
+                    "+---------------------------------------------------------------------------------------------------------------+");
+            List<String> filtered = Arrays.asList(result.stdout.split("\\R")).stream()
+                    .filter(s -> s.contains("Peek on") || s.contains("Poke on") || s.contains("Expected "))
+                    .collect(Collectors.toList());
+            if (!filtered.isEmpty())
+                System.out.print("+");
+            System.out.println(String.join(System.lineSeparator() + "+", filtered));
+            System.out.println(
+                    "+---------------------------------------------------------------------------------------------------------------+");
+            if (!result.stderr.isBlank()) {
+                System.out.println("Reported errors:");
+                System.out.println(result.stderr);
+            }
         }
-        System.out.println("###############################");
     }
 }
 
@@ -145,7 +160,7 @@ class Barista {
             String commandString = String.join(" ", commandArgs);
 
             Future<?> stdoutFuture = executor.submit(() -> readStream(process.getInputStream(), stdout));
-            Future<?> stderrFuture = executor.submit(() -> readStream(process.getInputStream(), stderr));
+            Future<?> stderrFuture = executor.submit(() -> readStream(process.getErrorStream(), stdout));
             int exitCode = process.waitFor();
             stdoutFuture.get();
             stderrFuture.get();
