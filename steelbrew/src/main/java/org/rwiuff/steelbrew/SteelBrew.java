@@ -3,11 +3,8 @@ package org.rwiuff.steelbrew;
 import java.io.IOException;
 import java.nio.file.*;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Comparator;
 
-import org.rwiuff.steelbrew.brewer.Brewer;
-import org.rwiuff.steelbrew.brewer.Testbench;
 import org.rwiuff.steelbrew.forge.Forge;
 
 public class SteelBrew {
@@ -36,24 +33,23 @@ public class SteelBrew {
     }
 
     public void cleanAux() {
-        ArrayList<Brewer> brewers = Forge.getBrewers();
-        for (Brewer brewer : brewers) {
-            ArrayList<Testbench> testbenches = brewer.getTestbenches();
-            for (Testbench testbench : testbenches) {
-                String testName = testbench.getName();
-                File tb = new File("tb_" + testName + ".cpp");
-                File wf = new File("waveform" + testName + ".vcd");
-                File stamp = new File(".stamp." + testName + ".verilate");
-                if (tb.delete())
-                    System.out.println(tb + " deleted");
-                if (wf.delete())
-                    System.out.println(wf + " deleted");
-                if (stamp.delete())
-                    System.out.println(stamp + " deleted");
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        if(workingDirectory.isDirectory()){
+            File[] files = workingDirectory.listFiles((dir, name)-> name.endsWith(".cpp")|| name.endsWith(".vcd")||name.endsWith(".verilate"));
+            if(files != null){
+                for (File file: files){
+                    if(file.delete()){
+                        System.out.println("Deleted: " + file.getName());
+                    }
+                }
             }
         }
         File makefile = new File("Makefile");
         if (makefile.delete())
             System.out.println("Makefile deleted");
+    }
+
+    public void burn(){
+        Forge.reset();
     }
 }

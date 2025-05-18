@@ -55,16 +55,6 @@ public class Brewer {
 
     public void runDUT() { // Function to easily run a DUT without any tests
         Testbench run = new Testbench(dut, "run", clocks);
-        run.add("    while (sim_time < MAX_SIM_TIME) {\n");
-        run.add("        dut->clk ^= 1;\n");
-        run.add("        dut->eval();\n");
-        run.add("        if(dut->clk == 1){\n");
-        run.add("            posedge_cnt++;\n");
-        run.add("        }\n");
-        run.add("        m_trace->dump(sim_time);\n");
-        run.add("        sim_time++;\n");
-        run.add("    }\n");
-        run.add("\n");
         testbenches.add(run);
     }
 
@@ -86,18 +76,8 @@ public class Brewer {
                                   // runs until max number of cycles
             HashMap<String, ArrayList<String>> assertions = batch.getAssertions();
             Set<String> functions = assertions.keySet();
-            functions.forEach(f -> assertions.get(f).forEach(s -> testbench.addFunc(s)));
-            testbench.add("    while (sim_time < MAX_SIM_TIME) {\n");
-            testbench.add("        dut->clk ^= 1;\n");
-            testbench.add("        dut->eval();\n");
-            testbench.add("        if(dut->clk == 1){\n");
-            testbench.add("            posedge_cnt++;\n");
-            testbench.add("        }\n");
-            functions.forEach(f -> testbench.add(f + "\n"));
-            testbench.add("        m_trace->dump(sim_time);\n");
-            testbench.add("        sim_time++;\n");
-            testbench.add("    }\n");
-            testbench.add("\n");
+            functions.forEach(f -> assertions.get(f).forEach(s -> testbench.addPreamble(s)));
+            functions.forEach(f -> testbench.addCheck("            "+f + "\n"));
         }
         ArrayList<String> steps = batch.getSteps();
         for (String step : steps) {

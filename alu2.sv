@@ -60,7 +60,7 @@ module alu2 #(
                         out_valid <= '0;
                 end else begin
                         out       <= result;
-                        out_valid <= in_valid_r;
+                        out_valid <= 1'b1;
                 end
         end
 

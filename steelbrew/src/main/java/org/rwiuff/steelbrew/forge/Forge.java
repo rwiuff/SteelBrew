@@ -44,6 +44,12 @@ public class Forge {
         return instance;
     }
 
+    public static void reset(){
+        Forge.wsl=false;
+        Forge.brewers = new ArrayList<>();
+        Forge.orders = new ArrayList<>();
+    }
+
     public static void enableWSL(boolean wsl) {
         Forge.wsl = wsl;
     }
@@ -95,7 +101,8 @@ public class Forge {
             System.out.println(
                     "+---------------------------------------------------------------------------------------------------------------+");
             List<String> filtered = Arrays.asList(result.stdout.split("\\R")).stream()
-                    .filter(s -> s.contains("Peek on") || s.contains("Poke on") || s.contains("Expected "))
+                    .filter(s -> s.contains("Peek on") || s.contains("Poke on") || s.contains("Expected ")
+                            || s.contains("Assertion"))
                     .collect(Collectors.toList());
             if (!filtered.isEmpty())
                 System.out.print("+");
