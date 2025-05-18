@@ -92,7 +92,8 @@ From a declared SteelBrew object, there are commands to clean the working direct
 - `.clean()` for executing both of the above
 ## Todo list
 - [X] Clean up the STDOUT for a nicer user experience.
-- [ ] Rewrite testbench heuristics to allow for time-independent tests.
-- [ ] Implement assertions
+- [X] Rewrite testbench heuristics to allow for time-independent tests.
+- [X] Implement assertions
+- [ ] Implement ABV as per SVA
 - [ ] Enable Verilator multithreading
 - [ ] Refactor into deployable plugin
