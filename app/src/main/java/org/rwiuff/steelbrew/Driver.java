@@ -35,12 +35,13 @@ public class Driver {
         Batch batch1 = new Batch("FirstTest");
         batch1.addSignal(a_in);
         batch1.addSignal(b_in);
-        batch1.Assert(a_in, b_in, 1, Operator.neq, alu);
+        batch1.Assert(a_in, b_in, 1, Operator.eq, alu);
         batch1.peek(a_in);
         batch1.peek(b_in);
         batch1.poke(a_in, BigInteger.TWO);
         batch1.step();
-        batch1.peek(a_in);
+        batch1.step();
+        batch1.poke(b_in, BigInteger.TWO);
 
         Batch batch2 = new Batch("SecondTest");
         batch2.addSignal(a_in);
@@ -51,10 +52,17 @@ public class Driver {
         batch2.poke(b_in, BigInteger.TWO);
         batch2.step();
         batch2.poke(a_in, BigInteger.TWO);
-        batch2.peek(a_in);
 
+        Batch batch3 = new Batch("ThirdTest");
+        batch3.addSignal(a_in);
+        batch3.Assert(a_in, BigInteger.TEN, 1, Operator.leq, alu);
+        for(int i = 0; i < 15; i++){
+            batch3.poke(a_in, BigInteger.valueOf(i));
+            batch3.step();
+        }
         alu.brew(batch1);
         alu.brew(batch2);
+        alu.brew(batch3);
         Forge.simulate();
     }
 
