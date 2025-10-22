@@ -2,7 +2,6 @@
 # SteelBrew
 This reporsitory contains SteelBrew, the Bachelor's project by Rasmus Wiuff ([rwiuff@gmail.com](mailto:rwiuff@gmail.com)).
 
-The related thesis can be found in the repository [rwiuff/02125Thesis](https://github.com/rwiuff/02125Thesis)
 ## Contents
 1. [Requirements](#requirements)
 2. [Download and usage](#download-and-usage)
